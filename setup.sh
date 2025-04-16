@@ -2,6 +2,8 @@
 set -e # Exit on error
 
 VENV_DIR="${1:-venv}"
+REPO_DIR="${2:-$(pwd)}"
+REPO_DIR="${REPO_DIR%/}" # Remove trailing slash if present
 
 declare -A versions
 
@@ -104,7 +106,7 @@ else
 fi
 
 echo "📦 Installing remaining pip requirements..."
-pip install -r requirements.txt
+pip install -r "$REPO_DIR/requirements.txt"
 
 echo "📦 Installing additional pip git dependencies..."
 pip install git+https://github.com/fishbotics/pointnet2_ops.git
