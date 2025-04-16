@@ -1,22 +1,7 @@
 #!/bin/bash
 set -e # Exit on error
 
-echo "🔍 Checking system compatibility..."
-if ! grep -q "Ubuntu 24.04.2 LTS" /etc/os-release || ! grep -q "WSL2" /proc/version; then
-    echo "⚠️ Warning: This script is tested only on WSL2 with Ubuntu 24.04.2 LTS. Your system may not be fully compatible."
-fi
-
-echo "🐍 Setting up Python virtual environment..."
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-    echo "✅ Virtual environment created."
-else
-    echo "✅ Virtual environment already exists."
-fi
-
-# Activate the virtual environment
-source venv/bin/activate
-echo "✅ Virtual environment activated."
+declare -A versions
 
 check_and_install() {
     local name="$1"
@@ -38,7 +23,7 @@ check_and_install() {
             echo "✅ Installed $name."
             versions["$name"]="N/A"
         fi
-        else
+    else
         echo "✅ $name is already installed."
         if [ -n "$version_command" ]; then
             local version_output
@@ -48,10 +33,40 @@ check_and_install() {
         else
             versions["$name"]="N/A"
         fi
-        fi
-    }
+    fi
+}
 
-declare -A versions
+activate_virtualenv() {
+    echo "🔍 Activating virtual environment..."
+    source "$VENV_DIR/bin/activate" || {
+        echo "❌ Failed to activate virtual environment. Please check your setup."
+        exit 1
+    }
+    echo "✅ Virtual environment activated."
+}
+
+echo "🔍 Checking system compatibility..."
+if ! grep -q "Ubuntu 24.04.2 LTS" /etc/os-release || ! grep -q "WSL2" /proc/version; then
+    echo "⚠️ Warning: This script is tested only on WSL2 with Ubuntu 24.04.2 LTS. Your system may not be fully compatible."
+fi
+
+VENV_DIR="ulip-venv"
+
+echo "🐍 Setting up Python 3.11 virtual environment..."
+if ! command -v python3.11 &>/dev/null; then
+    echo "❌ Python 3.11 is not installed. Please install it using the following command:"
+    echo "sudo apt install -y python3.11 python3.11-venv python3.11-distutils python3.11-dev"
+    exit 1
+fi
+
+if [ ! -d "$VENV_DIR" ]; then
+    python3.11 -m venv "$VENV_DIR"
+    echo "✅ Virtual environment created with Python 3.11."
+else
+    echo "✅ Virtual environment already exists."
+fi
+
+activate_virtualenv
 
 check_and_install "CUDA" "command -v nvcc" "sudo apt install -y nvidia-cuda-toolkit" "nvcc --version | grep release"
 check_and_install "HDF5" "dpkg -l | grep -q libhdf5-dev" "sudo apt install -y libhdf5-dev hdf5-tools" "h5cc -showconfig | grep 'HDF5 Version'"
@@ -90,3 +105,14 @@ fi
 
 echo "📦 Installing remaining pip requirements..."
 pip install -r requirements.txt
+
+echo "📦 Installing additional pip git dependencies..."
+pip install git+https://github.com/fishbotics/pointnet2_ops.git
+pip install wheel
+pip install --no-build-isolation git+https://github.com/unlimblue/KNN_CUDA.git
+
+echo "✅ Setup completed successfully!"
+echo "🔍 To activate the virtual environment in the future, run:"
+echo "source $VENV_DIR/bin/activate"
+echo "🔍 To deactivate the virtual environment, run:"
+echo "deactivate"
