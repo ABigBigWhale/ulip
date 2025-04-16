@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e # Exit on error
 
+VENV_DIR="${1:-venv}"
+
 declare -A versions
 
 check_and_install() {
@@ -49,8 +51,6 @@ echo "🔍 Checking system compatibility..."
 if ! grep -q "Ubuntu 24.04.2 LTS" /etc/os-release || ! grep -q "WSL2" /proc/version; then
     echo "⚠️ Warning: This script is tested only on WSL2 with Ubuntu 24.04.2 LTS. Your system may not be fully compatible."
 fi
-
-VENV_DIR="venv"
 
 echo "🐍 Setting up Python 3.11 virtual environment..."
 if ! command -v python3.11 &>/dev/null; then
