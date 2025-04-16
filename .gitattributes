@@ -1,0 +1,56 @@
+[attr]lfs               filter=lfs diff=lfs merge=lfs -text
+*.bin                   lfs
+# 3D models
+*.3dm                   lfs
+*.3ds                   lfs
+*.blend                 lfs
+*.c4d                   lfs
+*.collada               lfs
+*.dae                   lfs
+*.dxf                   lfs
+*.FBX                   lfs
+*.fbx                   lfs
+*.gltf                  lfs
+*.glb                   lfs
+*.jas                   lfs
+*.lws                   lfs
+*.lxo                   lfs
+*.ma                    lfs
+*.max                   lfs
+*.mb                    lfs
+*.obj                   lfs
+*.ply                   lfs
+*.skp                   lfs
+*.stl                   lfs
+*.ztl                   lfs
+# Images
+*.bmp                   lfs
+*.exr                   lfs
+*.gif                   lfs
+*.hdr                   lfs
+*.iff                   lfs
+*.jpeg                  lfs
+*.jpg                   lfs
+*.pict                  lfs
+*.png                   lfs
+*.psd                   lfs
+*.tga                   lfs
+*.tif                   lfs
+*.tiff                  lfs
+*.webp                  lfs
+# Compressed Archive
+*.7z                    lfs
+*.bz2                   lfs
+*.gz                    lfs
+*.rar                   lfs
+*.tar                   lfs
+*.zip                   lfs
+# Compiled Dynamic Library
+*.dll                   lfs
+*.pdb                   lfs
+*.so                    lfs
+# Fonts
+*.otf                   lfs
+*.ttf                   lfs
+# Documents
+*.pdf                   lfs
