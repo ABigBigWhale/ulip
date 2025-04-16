@@ -50,7 +50,7 @@ if ! grep -q "Ubuntu 24.04.2 LTS" /etc/os-release || ! grep -q "WSL2" /proc/vers
     echo "⚠️ Warning: This script is tested only on WSL2 with Ubuntu 24.04.2 LTS. Your system may not be fully compatible."
 fi
 
-VENV_DIR="ulip-venv"
+VENV_DIR="venv"
 
 echo "🐍 Setting up Python 3.11 virtual environment..."
 if ! command -v python3.11 &>/dev/null; then
